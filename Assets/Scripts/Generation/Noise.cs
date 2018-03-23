@@ -22,6 +22,27 @@ public class Noise {
         //return f > 0.4f || f < 0.1f;
     }
 
+    public static Vector3 PredictEnemyPos(Vector3 startSearch, int radius) {
+        int halfSize = radius / 2;
+        Vector3 returnPos = new Vector3();
+        bool has = false;
+
+        for (int y = -halfSize; y <= halfSize; y++) {
+            for (int x = -halfSize; x <= halfSize; x++) {
+                int chunkInfo = GetChunkInfo((int)startSearch.x + x, (int)startSearch.z + y);
+
+                if (chunkInfo == 1 || chunkInfo == 3 || chunkInfo == 5 || chunkInfo == 7) {
+                    returnPos = new Vector3(startSearch.x + x, 0, startSearch.z + y);
+                    has = true;
+                    break;
+                }
+            }
+            if (has)
+                break;
+        }
+        return returnPos;
+    }
+
     public static bool[,] GetTreeMap(int chunkX, int chunkY, int size) {
         bool[,] noiseMap = new bool[size, size];
 

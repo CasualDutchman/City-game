@@ -15,7 +15,7 @@ public class Worldmanager : MonoBehaviour {
     public float tileScale;
     [HideInInspector]
     public int TileSize { get { return (int)(tileXY * tileScale); } }
-
+    
     public Material groundMaterial;
 
     Vector2 playerChunkPos;
@@ -260,9 +260,7 @@ public class Chunk {
 
         mesh.RecalculateNormals();
 
-        //meshFilter.mesh = null;
         meshFilter.mesh = mesh;
-        //meshCollider.sharedMesh = null;
         meshCollider.sharedMesh = mesh;
 
         meshRenderer.material = Worldmanager.instance.groundMaterial;
@@ -270,8 +268,6 @@ public class Chunk {
         foreach (Vector3 loc in treeLoc) {
             Worldmanager.instance.PlaceTree(loc, chunkObject.transform);
         }
-
-        //Debug.Log("Chunk Done Loading");
 
         verts.Clear();
         uvs.Clear();

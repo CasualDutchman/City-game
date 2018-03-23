@@ -13,11 +13,13 @@ public class EnemyManager : MonoBehaviour {
         instance = this;
 	}
 	
-	public void SpawnEnemy(Vector3 pos) {
+	public Enemy SpawnEnemy(Vector3 pos) {
         GameObject go = Instantiate(enemyPrefab);
         go.transform.position = pos;
 
         enemies.Add(go.GetComponent<Enemy>());
+
+        return go.GetComponent<Enemy>();
     }
 
     public Enemy FromPosition(Vector3 pos, float radius) {
@@ -34,8 +36,8 @@ public class EnemyManager : MonoBehaviour {
     }
 
     public void RemoveEnemyAtChunk(Vector2 chunkPos) {
-        Enemy enemy = FromPosition(new Vector3(chunkPos.x * Worldmanager.instance.tileXY, 0, chunkPos.y * Worldmanager.instance.tileXY), Worldmanager.instance.tileXY);
-        if (enemy != null) {
+        Enemy enemy = FromPosition(new Vector3(chunkPos.x * Worldmanager.instance.TileSize, 0, chunkPos.y * Worldmanager.instance.TileSize), Worldmanager.instance.TileSize);
+        if (enemy != null && !MissionManager.instance.IsMissionObjective(enemy.transform)) {
             GameObject go = enemy.gameObject;
             enemies.Remove(enemy);
             Destroy(go);

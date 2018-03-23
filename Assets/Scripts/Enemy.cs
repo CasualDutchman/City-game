@@ -72,7 +72,7 @@ public class Enemy : MonoBehaviour {
         health -= amount;
         if (health < 0) {
             EnemyManager.instance.RemoveEnemy(this);
-            GroupMovement.instance.KillEnemy();
+            GroupMovement.instance.KillEnemy(transform);
             Destroy(gameObject);
             return true;
         }

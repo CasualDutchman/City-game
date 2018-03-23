@@ -34,7 +34,7 @@ public class RestingManager : MonoBehaviour {
     }
 
     public void RemoveRestingAtChunk(Vector2 chunkPos) {
-        Transform t = RestingAreaAtPosition(new Vector3(chunkPos.x * Worldmanager.instance.tileXY, 0, chunkPos.y * Worldmanager.instance.tileXY), Worldmanager.instance.tileXY);
+        Transform t = RestingAreaAtPosition(new Vector3(chunkPos.x * Worldmanager.instance.TileSize, 0, chunkPos.y * Worldmanager.instance.TileSize), Worldmanager.instance.TileSize);
         if (t != null) {
             GameObject go = t.gameObject;
             restingAreas.Remove(t);

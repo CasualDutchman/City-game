@@ -7,7 +7,7 @@ public class GroupMovement : MonoBehaviour {
 
     public static GroupMovement instance;
 
-    WolfPack wolfPack;
+    UnitAttributes unitAtt;
 
     public GameObject wolfPrefab;
 
@@ -52,7 +52,7 @@ public class GroupMovement : MonoBehaviour {
     }
 
     void Start () {
-        wolfPack = GetComponent<WolfPack>();
+        unitAtt = GetComponent<UnitAttributes>();
 
         relativePositions = new Vector3[amountOfWolves];
         newRelativePositions = new Vector3[amountOfWolves];
@@ -64,8 +64,8 @@ public class GroupMovement : MonoBehaviour {
             //newRelativePositions[i] = oldRelativePositions[i];
 
             GameObject go = Instantiate(wolfPrefab, RelativePositionToWorld(i), Quaternion.identity);
-            go.GetComponent<WolfMovement>().id = i;
-            go.GetComponent<WolfMovement>().maxSpeed = Random.Range(maxSpeed - 0.3f, maxSpeed + 0.3f);
+            go.GetComponent<UnitMovement>().id = i;
+            go.GetComponent<UnitMovement>().maxSpeed = Random.Range(maxSpeed - 0.3f, maxSpeed + 0.3f);
 
             wolves[i] = go.transform;
 
@@ -149,28 +149,30 @@ public class GroupMovement : MonoBehaviour {
 
         if (attackingEnemy != null) {
             attackTimer += Time.deltaTime;
-            if (attackTimer >= wolfPack.attackSpeed) {
+            if (attackTimer >= unitAtt.attackSpeed) {
                 attackTimer = 0;
-                if (attackingEnemy.Damage(wolfPack.attackDamage)) {
+                if (attackingEnemy.Damage(unitAtt.attackDamage)) {
                     attackingEnemy = null;
                 }
             }
         }
 
-        wolfPack.atRestingPlace = RestingManager.instance.RestingAreaAtPosition(centerOfWolves, 3) != null;
+        unitAtt.atTowerPlace = RestingManager.instance.RestingAreaAtPosition(centerOfWolves, 3) != null;
 	}
 
     public void Attack(float damage) {
-        wolfPack.Damage(damage);
+        unitAtt.Damage(damage);
     }
 
     public void AddFood(float amount) {
-        wolfPack.ChangeFood(amount);
+        unitAtt.ChangeFood(amount);
     }
 
-    public void KillEnemy() {
-        wolfPack.ChangeFood(15);
-        wolfPack.AddXP(25);
+    public void KillEnemy(Transform t) {
+        unitAtt.ChangeFood(15);
+        unitAtt.AddXP(25);
+        MissionManager.instance.EnemyDestroyed(t);
+        CityManager.instance.Fill();
     }
 
     public Vector3 RelativePositionToWorld(int id) {
